@@ -55,7 +55,7 @@ function render() {
         const br = document.createElement('br');
 
         const small = document.createElement('small');
-        small.textContent = entry.date; // textContent protège contre XSS si la date était manipulée
+        small.textContent = entry.date;
 
         divInfo.appendChild(strong);
         divInfo.appendChild(br);
@@ -81,48 +81,53 @@ function render() {
     });
 }
 
-function exportToCSV() {
+function exportToExcel() {
     if (entries.length === 0) {
         alert("Aucune donnée à exporter.");
         return;
     }
 
-    // En-têtes du CSV
-    let csvContent = "Date;Type;Heures;Total Minutes\n";
-
-    entries.forEach(entry => {
+    // Préparation des données pour Excel
+    const data = entries.map(entry => {
         // Validation basique
-        if (!entry || typeof entry.value !== 'number') return;
+        if (!entry || typeof entry.value !== 'number') return null;
 
-        const typeLabel = entry.type === 'plus' ? 'Heures faites' : 'Heures récupérées';
-        const hours = `${Math.floor(entry.value / 60)}h${(entry.value % 60).toString().padStart(2, '0')}`;
+        const hoursFormatted = `${Math.floor(entry.value / 60)}h${(entry.value % 60).toString().padStart(2, '0')}`;
+        const signedTotal = entry.type === 'plus' ? `+${hoursFormatted}` : `-${hoursFormatted}`;
+        const dateStr = entry.date || "";
 
-        // Construction de la ligne
-        const row = [
-            entry.date,
-            typeLabel,
-            hours,
-            entry.value
-        ].join(";");
+        // Protection contre l'injection de formules (CSV/Excel Injection)
+        const sanitize = (str) => {
+            if (typeof str === 'string' && /^[=+\-@\t\r]/.test(str)) {
+                return "'" + str;
+            }
+            return str;
+        };
 
-        csvContent += row + "\n";
-    });
+        return {
+            "Date": sanitize(dateStr),
+            "Total": sanitize(signedTotal)
+        };
+    }).filter(item => item !== null); // Filtrer les entrées invalides
 
-    // Création du blob avec BOM pour support UTF-8 (accents Excel)
-    const blob = new Blob(["\uFEFF" + csvContent], { type: 'text/csv;charset=utf-8;' });
-    const link = document.createElement("a");
-    const url = URL.createObjectURL(blob);
+    // Création du classeur et de la feuille
+    const worksheet = XLSX.utils.json_to_sheet(data);
 
-    link.setAttribute("href", url);
-    link.setAttribute("download", `heures_supp_${new Date().toISOString().split('T')[0]}.csv`);
-    link.style.visibility = 'hidden';
+    // Ajustement de la largeur des colonnes
+    const wscols = [
+        { wch: 15 }, // Date
+        { wch: 15 }  // Total
+    ];
+    worksheet['!cols'] = wscols;
 
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Heures");
+
+    // Téléchargement
+    XLSX.writeFile(workbook, `heures_supp_${new Date().toISOString().split('T')[0]}.xlsx`);
 }
 
-document.getElementById('exportBtn').addEventListener('click', exportToCSV);
+document.getElementById('exportBtn').addEventListener('click', exportToExcel);
 
 form.addEventListener('submit', (e) => {
     e.preventDefault();
