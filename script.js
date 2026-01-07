@@ -129,7 +129,7 @@ form.addEventListener('submit', (e) => {
     const m = parseInt(document.getElementById('minutes').value) || 0;
 
     const newEntry = {
-        type: document.getElementById('type').value,
+        type: document.querySelector('input[name="entryType"]:checked').value,
         value: (h * 60) + m,
         date: new Date().toLocaleDateString('fr-FR')
     };
