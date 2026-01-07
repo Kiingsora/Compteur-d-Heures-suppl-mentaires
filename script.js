@@ -81,53 +81,47 @@ function render() {
     });
 }
 
-function exportToExcel() {
+function exportToCSV() {
     if (entries.length === 0) {
         alert("Aucune donnée à exporter.");
         return;
     }
 
-    // Préparation des données pour Excel
-    const data = entries.map(entry => {
+    // En-têtes du CSV
+    let csvContent = "Date;Type;Heures;Total\n";
+
+    entries.forEach(entry => {
         // Validation basique
-        if (!entry || typeof entry.value !== 'number') return null;
+        if (!entry || typeof entry.value !== 'number') return;
 
-        const hoursFormatted = `${Math.floor(entry.value / 60)}h${(entry.value % 60).toString().padStart(2, '0')}`;
-        const signedTotal = entry.type === 'plus' ? `+${hoursFormatted}` : `-${hoursFormatted}`;
-        const dateStr = entry.date || "";
+        const typeLabel = entry.type === 'plus' ? 'Heures faites' : 'Heures récupérées';
+        const hoursStr = `${Math.floor(entry.value / 60)}h${(entry.value % 60).toString().padStart(2, '0')}`;
 
-        // Protection contre l'injection de formules (CSV/Excel Injection)
-        const sanitize = (str) => {
-            if (typeof str === 'string' && /^[=+\-@\t\r]/.test(str)) {
-                return "'" + str;
-            }
-            return str;
-        };
+        let row = [
+            entry.date,
+            typeLabel,
+            hoursStr,
+            "" // Colonne Total vide comme dans l'exemple
+        ];
 
-        return {
-            "Date": sanitize(dateStr),
-            "Total": sanitize(signedTotal)
-        };
-    }).filter(item => item !== null); // Filtrer les entrées invalides
+        csvContent += row.join(";") + "\n";
+    });
 
-    // Création du classeur et de la feuille
-    const worksheet = XLSX.utils.json_to_sheet(data);
+    // Création du blob avec BOM pour support UTF-8 (accents Excel)
+    const blob = new Blob(["\uFEFF" + csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement("a");
+    const url = URL.createObjectURL(blob);
 
-    // Ajustement de la largeur des colonnes
-    const wscols = [
-        { wch: 15 }, // Date
-        { wch: 15 }  // Total
-    ];
-    worksheet['!cols'] = wscols;
+    link.setAttribute("href", url);
+    link.setAttribute("download", `heures_supp_${new Date().toISOString().split('T')[0]}.csv`);
+    link.style.visibility = 'hidden';
 
-    const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, "Heures");
-
-    // Téléchargement
-    XLSX.writeFile(workbook, `heures_supp_${new Date().toISOString().split('T')[0]}.xlsx`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
 }
 
-document.getElementById('exportBtn').addEventListener('click', exportToExcel);
+document.getElementById('exportBtn').addEventListener('click', exportToCSV);
 
 form.addEventListener('submit', (e) => {
     e.preventDefault();

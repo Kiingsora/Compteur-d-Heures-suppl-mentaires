@@ -5,16 +5,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mon Compteur d'Heures</title>
+
     <meta http-equiv="Content-Security-Policy"
-        content="default-src 'self'; script-src 'self' https://cdn.sheetjs.com; style-src 'self'; frame-ancestors 'none';">
-    <meta name="referrer" content="no-referrer">
+        content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline';">
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-    <button>salut
 
-    </button>
     <div class="container">
         <div class="balance-card">
             <h2>Solde Actuel</h2>
@@ -38,13 +36,13 @@
             </form>
         </div>
 
-        <button id="exportBtn" class="btn-secondary" style="margin-bottom: 20px;">Exporter en Excel</button>
+        <button id="exportBtn" class="btn-secondary">Exporter en CSV</button>
 
         <h3>Historique</h3>
         <ul id="history" class="history-list"></ul>
     </div>
 
-    <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
+
     <script src="script.js" defer></script>
 </body>
 
