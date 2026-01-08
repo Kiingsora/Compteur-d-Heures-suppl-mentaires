@@ -9,15 +9,19 @@
 body {
     font-family: 'Segoe UI', system-ui, sans-serif;
     background-color: var(--bg);
-    margin: 0;
+    margin: auto;
     padding: 10px;
     /* Reduced padding */
-    width: 350px;
+    width: 100rem;
     /* Fixed width for popup */
     min-height: 400px;
 }
 
 .container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     width: 100%;
 }
 
@@ -127,6 +131,7 @@ button:hover {
     color: var(--primary);
     border: 2px solid var(--primary);
     margin-bottom: 20px;
+    width: 10rem;
 }
 
 .btn-secondary:hover {
