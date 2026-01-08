@@ -11,6 +11,26 @@
 </head>
 
 <body>
+    <a href="#" id="helpLink" class="help-link">Comment ça marche ?</a>
+
+    <div id="helpModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h3>Comment ça marche ?</h3>
+            <p><strong>1. Choisissez le type :</strong><br>
+                • Heures supp (+) : Ajoute du temps.<br>
+                • Heures récup (-) : Déduit du temps.</p>
+
+            <p><strong>2. Entrez la durée :</strong><br>
+                Formats acceptés :<br>
+                • <code>1h30</code> ou <code>1:30</code><br>
+                • <code>1.50</code> (pour 1h50)<br>
+                • <code>90</code> (minutes)</p>
+
+            <p><strong>3. Validez !</strong><br>
+                Le solde se met à jour automatiquement.</p>
+        </div>
+    </div>
 
     <div class="container">
         <div class="balance-card">
@@ -34,8 +54,7 @@
                     </div>
                 </div>
                 <div class="input-group">
-                    <input type="number" id="hours" placeholder="Heures" min="0" required>
-                    <input type="number" id="minutes" placeholder="Minutes" min="0" max="59" required>
+                    <input type="text" id="timeInput" placeholder="Durée (Format: 1h30, 1.32, 90)" required>
                 </div>
                 <button type="submit">Enregistrer</button>
             </form>
