@@ -26,22 +26,6 @@ Le projet est organisé de manière propre pour le développement et l'hébergem
 ### Option 1 : Utilisation Simple (Site Web)
 Vous pouvez simplement ouvrir le fichier `index.html` dans n'importe quel navigateur web. L'application fonctionnera parfaitement.
 
-### Option 2 : Extension Chrome / Edge / Brave
-Pour avoir votre compteur toujours à portée de clic :
-
-1. Ouvrez votre navigateur et allez à l'adresse `chrome://extensions` (ou `edge://extensions`).
-2. Activez le **Mode développeur** (souvent un interrupteur en haut à droite).
-3. Cliquez sur le bouton **Charger l'extension non empaquetée** (ou "Load unpacked").
-4. Sélectionnez le dossier racine du projet (`projet compteur heure supp`).
-5. L'extension est installée ! Cliquez sur l'icône dans votre barre d'outils pour l'utiliser.
-
-### Option 3 : Extension Firefox
-1. Ouvrez Firefox et allez à l'adresse `about:debugging`.
-2. Cliquez sur **Ce Firefox** dans le menu de gauche.
-3. Cliquez sur **Charger un module complémentaire temporaire**.
-4. Sélectionnez le fichier `manifest.json` dans le dossier du projet.
-*(Note : Sur Firefox, les extensions temporaires sont supprimées au redémarrage du navigateur).*
-
 ---
 
 ## 🛠️ Développement
