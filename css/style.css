@@ -10,7 +10,7 @@ html {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    height: 100vh;
+    min-height: 100vh;
     color: white;
     background-image: url(../assets/images/fond\ BWA.png);
     background-size: cover;
@@ -22,8 +22,7 @@ html {
 body {
     font-family: 'Segoe UI', system-ui, sans-serif;
     padding: 10px;
-    height: 100vh;
-    min-height: 400px;
+    min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -155,6 +154,28 @@ button:hover {
 .history-list {
     list-style: none;
     padding: 0;
+    max-height: 300px;
+    overflow-y: auto;
+    padding-right: 5px;
+}
+
+/* Scrollbar styling for history */
+.history-list::-webkit-scrollbar {
+    width: 6px;
+}
+
+.history-list::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+}
+
+.history-list::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 10px;
+}
+
+.history-list::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.5);
 }
 
 .history-item {
